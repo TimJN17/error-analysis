@@ -1,0 +1,14 @@
+$ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+$ git clone https://github.com/TimJN17/error_analysis
+
+$ cd spack-monitor-nlp
+$ cd spacy-tokens
+
+$ git config user.name "<TimJN17>"
+$ git config user.email "<tim.j.n17@gmail.com>"
+
+$ git add <file> ... or <.> for al;
+
+$ git commit -m "<commit comment to be changed>"
+
+$ git push -u origin "<branch name>"
