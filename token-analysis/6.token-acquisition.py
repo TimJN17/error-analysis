@@ -33,18 +33,12 @@ def print_dictionary(directory_, filename, dictionary_object):
     os.chdir(directory_)
     if os.path.exists(filename):
         os.remove(filename)
-    final_array = np.array([list(dictionary_object.values())[0]]).T
-    with open(filename, mode='a+') as f:
-        for value in list(dictionary_object.values()):
-            words = ' '.join(value)
-            f.write(f'{words}\n')
-    f.close()
-    # np.savetxt(fname=filename,
-    #            X=final_array,
-    #            newline='\n',
-    #            header='Error-analysis tokens',
-    #            delimiter=' ',
-    #            fmt='%-15.20s')
+    final_df = pd.DataFrame(list(dictionary_object.values())[0], dtype=str, columns=['Tokens'])
+    for value in list(dictionary_object.values())[1:]:
+        df = pd.DataFrame(value, dtype=str, columns=['Tokens__'])
+        final_df = pd.concat([final_df, df], axis=1, ignore_index=True)
+    np.savetxt(X=final_df, fname=filename, fmt='%s', newline='\n', delimiter='  |  ')
+    return -1
 
 
 def json_helper(file):
