@@ -5,10 +5,10 @@ import numpy as np
 from helpers import read_json
 
 
-def read_file(file_name):
+def read_file(fname):
     spec_dict = {}
     count = 0
-    with open(file_name, mode="r+") as f:
+    with open(fname, mode="r+") as f:
         lines = f.readlines()
         for line in lines:
             words = line.strip(' ').split()
@@ -17,11 +17,10 @@ def read_file(file_name):
         return spec_dict
 
 
-def find_file(specs, directory):
-    os.chdir(directory)
+def find_file(specs, direc_tory):
+    os.chdir(direc_tory)
     file_dict = {}
     count = 0
-    # print(f"the number of files in this directory is: {len(os.listdir(os.getcwd()))}")
     for spec in specs.values():
         for file in os.listdir():
             if spec in file:
@@ -30,13 +29,30 @@ def find_file(specs, directory):
     return file_dict
 
 
+def print_dictionary(directory_, filename, dictionary_object):
+    os.chdir(directory_)
+    if os.path.exists(filename):
+        os.remove(filename)
+    final_array = np.array([list(dictionary_object.values())[0]]).T
+    with open(filename, mode='a+') as f:
+        for value in list(dictionary_object.values()):
+            words = ' '.join(value)
+            f.write(f'{words}\n')
+    f.close()
+    # np.savetxt(fname=filename,
+    #            X=final_array,
+    #            newline='\n',
+    #            header='Error-analysis tokens',
+    #            delimiter=' ',
+    #            fmt='%-15.20s')
+
+
 def json_helper(file):
     content = read_json(file)
     return content
 
 
 if __name__ == "__main__":
-
     # Variables
     directory = sys.argv[1]
     file_name = sys.argv[2]
@@ -45,8 +61,11 @@ if __name__ == "__main__":
     print(f'The directory is: {directory[-10:]}')
     dict_of_specs = read_file(file_name)
     final_dictionary = find_file(dict_of_specs, directory)
-    for value in final_dictionary.values():
-        print(value)
+    print_dictionary(filename="closest-good-specs-array.txt", dictionary_object=final_dictionary,
+                     directory_=directory[0:-8])
+
+    # for value in final_dictionary.values():
+    #     print(value)
 
     # Configurations
     # python 6.token-acquisition.py
